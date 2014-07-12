@@ -2,10 +2,11 @@ from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext, loader
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 
-from .serializers import UserSerializer, GroupSerializer
+from .models import Event
+from .serializers import UserSerializer, GroupSerializer, EventSerializer
 
 
 def index(request):
@@ -30,3 +31,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class EventViewSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    """
+    API endpoint that allows events to be viewed or edited.
+    """
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
