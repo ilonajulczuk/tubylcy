@@ -31,6 +31,6 @@ def reload_app():
     with cd('/var/www/source/'):
         venv = "source /var/www/venv/bin/activate && "
         run("git pull origin master")
-        run(venv+"python tubylcy/manage.py migrate")
-        run(venv+"python tubylcy/manage.py collectstatic")
+        run(venv+"python tubylcy/manage_production.py migrate")
+        run(venv+"python tubylcy/manage_production.py collectstatic")
         run("service circus restart")
