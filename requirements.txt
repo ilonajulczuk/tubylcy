@@ -3,4 +3,6 @@ djangorestframework==2.3.14
 Markdown==2.4.1
 django-filter==0.7
 selenium==2.42.1
-
+django_behave
+behave==1.2.4
+behaving==0.7
