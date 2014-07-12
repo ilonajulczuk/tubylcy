@@ -1,5 +1,5 @@
 .content {
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 .navbar {
@@ -17,3 +17,7 @@ footer {
 .pull-right {
     float:right;
 }
+
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+#map-canvas { height: 100% }

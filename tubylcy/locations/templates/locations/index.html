@@ -1,19 +1,6 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
-<!DOCTYPE html>
-<head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-        html { height: 100% }
-        body { height: 100%; margin: 0; padding: 0 }
-        #map-canvas { height: 100% }
-    </style>
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5todS3AsLd1r3gyTm9BMN34DLSOGITJw">
-    </script>
-
     <script>
-
         var map;
 
         function initialize() {
@@ -61,23 +48,22 @@
     </head>
 <div class="jumbotron">
     <div class="container">
-        <img src="http://placekitten.com/200/300">
         <h1>Help your community!</h1>
         <p><a class="btn btn-primary btn-lg" role="button" id="id-learn-more" href="{% url 'about' %}">Learn more »</a></p>
     </div>
 </div>
 <div>
-    <h1>Dear Guest!</h1>
-    <p>
-        This service is designed to control and support crowdfunding in your:
-    </p>
+    <div class='col-md-8' id="map-canvas"></div>
+    <div class="col-md-4">
+
+    <h1>Choose your adventure!</h1>
     <ul>
-        <li>City</li>
-        <li>District</li>
-        <li>Village</li>
-        <li>Anywhere you are!</li>
+        <li><a>Create</a> / <a>browse</a> events</li>
+        <li><a>Create</a> / <a>browse</a> quests</li>
+        <li><a>Donate</a> quests, events or people!</li>
+        <li><a>Mark</a> your places of interest</li>
     </ul>
+    </div>
 </div>
-<div id="map-canvas"></div>
 {% endblock %}
 

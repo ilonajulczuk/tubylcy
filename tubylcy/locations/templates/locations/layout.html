@@ -6,6 +6,11 @@
         <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="/static/custom/main.css" rel="stylesheet" media="screen">
 
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5todS3AsLd1r3gyTm9BMN34DLSOGITJw">
+        </script>
+
     </head>
     <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -21,14 +26,16 @@
             </div>
             <div class="navbar-collapse collapse text-right well-small">
                 {% if request.user.is_authenticated %}
+                <a class="btn btn-lg btn-danger" href="/profile/{{request.user.username}}">
+                    {% if request.user.first_name or request.user.last_name %}
+                    {{ request.user.first_name }} {{ request.user.last_name }}
+                    {% else %}
+                    {{ request.user.username }}
+                    {% endif %}
+                    {% if request.user.profile.account_verified %} (verified) {% else %} (unverified) {% endif %}
+                    profile
+                </a>
                 <a href="/accounts/logout/" class="text-right btn btn-lg btn-success">Logout</a>
-                {% if request.user.first_name or request.user.last_name %}
-                {{ request.user.first_name }} {{ request.user.last_name }}
-                {% else %}
-                {{ request.user.username }}
-                {% endif %}
-                {% if request.user.profile.account_verified %} (verified) {% else %} (unverified) {% endif %}
-
                 {% else %}
                 <a href="/accounts/login/" class="text-right btn btn-lg btn-success">Login</a>
                 {% endif %}
