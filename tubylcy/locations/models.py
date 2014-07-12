@@ -18,6 +18,7 @@ class Event(models.Model):
 class Quest(models.Model):
     created = models.DateTimeField(auto_now=True)
     finished = models.DateTimeField(null=True)
+    bounty = models.FloatField(default=0)
 
     title = models.CharField(max_length=200)
     description = models.TextField()
