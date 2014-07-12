@@ -1,0 +1,87 @@
+{% extends 'locations/layout.html' %}
+{% block content %}
+<div>
+    <h1>Events <a>[Create]</a> <a>[Browse all]</a></h1>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Creator</th>
+            <th>Starts</th>
+            <th>Ends</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    {% for event in events %}
+        <tr>
+            <td>
+                {{ event.title }}
+            </td>
+            <td>
+                {{ event.creator.username }}
+            </td>
+            <td>
+                {{ event.start }}
+            </td>
+            <td>
+                {{ event.end }}
+            </td>
+            <td>
+                {{ event.description }}
+            </td>
+        </tr>
+
+    {% endfor %}
+    </table>
+    {% if not events %}
+        No events so far...
+    {% endif %}
+
+    <h1>Quests <a>[Create]</a> <a>[Browse all]</a></h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Reporter</th>
+            <th>Created</th>
+            <th>Finished</th>
+            <th>Assignees</th>
+            <th>Bounty</th>
+        </tr>
+        </thead>
+        {% for quest in quests %}
+        <tr>
+            <td>
+                {{ quest.title }}
+            </td>
+            <td>
+                {{ quest.description }}
+            </td>
+            <td>
+                {{ quest.reporter.username }}
+            </td>
+            <td>
+                {{ quest.created }}
+            </td>
+            <td>
+                {{ quest.finished }}
+            </td>
+            <td>
+                {% for assignee in quest.assignees.all %}
+                {{ assignee }}
+                {% endfor %}
+            </td>
+            <td>
+                {{ quest.bounty }}
+                <a class='glyphicon glyphicon-usd ' href="/actions/donate/">donate!</a>
+            </td>
+        </tr>
+
+        {% endfor %}
+    </table>
+    {% if not events %}
+    No events so far...
+    {% endif %}
+</div>
+{% endblock %}

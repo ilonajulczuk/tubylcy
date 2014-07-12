@@ -1,41 +1,69 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
-<head>
-    <script type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_uoUe2-_GnkQVHLIG4nx_MkWnkOKxfMM">
-    </script>
-    <script type="text/javascript">
+    <script>
+        var map;
+
         function initialize() {
-             var mapOptions = {
-             center: new google.maps.LatLng(-34.397, 150.644),
-             zoom: 8
-         };
-             var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            var mapOptions = {
+                zoom: 14
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            // Try HTML5 geolocation
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    var infowindow = new google.maps.InfoWindow({
+                        map: map,
+                        position: pos,
+                        content: 'Location found using HTML5.'
+                    });
+                    map.setCenter(pos);
+                }, function() {
+                handleNoGeolocation(true);
+                   });
+            } else {
+                // Browser doesn't support Geolocation
+                handleNoGeolocation(false);
+              }
+        }
+
+        function handleNoGeolocation(errorFlag) {
+        if (errorFlag) {
+              var content = 'Error: The Geolocation service failed.';
+        } else {
+              var content = 'Error: Your browser doesn\'t support geolocation.';
+          }
+        var options = {
+                map: map,
+                position: new google.maps.LatLng(60, 105),
+                content: content
+        };
+
+        var infowindow = new google.maps.InfoWindow(options);
+            map.setCenter(options.position);
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-
-</head>
+    </head>
 <div class="jumbotron">
     <div class="container">
-        <img src="http://placekitten.com/200/300">
         <h1>Help your community!</h1>
         <p><a class="btn btn-primary btn-lg" role="button" id="id-learn-more" href="{% url 'about' %}">Learn more »</a></p>
     </div>
 </div>
 <div>
-    <h1>Dear Guest!</h1>
-    <p>
-        This service is designed to control and support crowdfunding in your:
-    </p>
+    <div class='col-md-8' id="map-canvas"></div>
+    <div class="col-md-4">
+
+    <h1>Choose your adventure!</h1>
     <ul>
-        <li>City</li>
-        <li>District</li>
-        <li>Village</li>
-        <li>Anywhere you are!</li>
+        <li><a>Create</a> / <a>browse</a> events</li>
+        <li><a>Create</a> / <a>browse</a> quests</li>
+        <li><a>Donate</a> quests, events or people!</li>
+        <li><a>Mark</a> your places of interest</li>
     </ul>
-    <div id="map-canvas"/>
+    </div>
 </div>
 {% endblock %}
 

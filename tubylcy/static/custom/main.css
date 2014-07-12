@@ -1,7 +1,23 @@
 .content {
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
+.navbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 footer {
     margin-top: 20px;
 }
+
+.logged-out {
+    background: gainsboro url("http://i.myniceprofile.com/1391/139154.jpg") no-repeat center 30px;
+    background-size: 90%;
+}
+.pull-right {
+    float:right;
+}
+
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+#map-canvas { height: 100% }
