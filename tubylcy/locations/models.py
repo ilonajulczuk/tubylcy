@@ -13,3 +13,14 @@ class Event(models.Model):
     # some kind of geohash?
     localization = models.CharField(max_length=100)
     creator = models.ForeignKey(User)
+
+
+class Quest(models.Model):
+    created = models.DateTimeField(auto_now=True)
+    finished = models.DateTimeField(null=True)
+
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    assignees = models.ManyToManyField(User, related_name='assigned_quests')
+    reporter = models.ForeignKey(User, related_name='reported_quests')
