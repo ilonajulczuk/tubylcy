@@ -20,7 +20,12 @@ def about(request):
 def profile(request, username):
     if request.user.username != username:
         return redirect('/')
-    return render(request, 'locations/profile.html')
+
+    ctx = {
+        'events': Event.objects.filter(creator__username=username)
+    }
+
+    return render(request, 'locations/profile.html', ctx)
 
 
 class UserViewSet(viewsets.ModelViewSet):
