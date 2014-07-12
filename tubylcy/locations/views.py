@@ -12,7 +12,13 @@ from .serializers import UserSerializer, GroupSerializer, EventSerializer
 def index(request):
     template = loader.get_template('locations/index.html')
     context = RequestContext(request, {
-        #here shit from *models* useful for webpage
+    })
+    return HttpResponse(template.render(context))
+
+
+def about(request):
+    template = loader.get_template('locations/about.html')
+    context = RequestContext(request, {
     })
     return HttpResponse(template.render(context))
 

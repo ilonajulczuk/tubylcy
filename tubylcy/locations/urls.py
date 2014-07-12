@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'tubylcy.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.index, name='index'),
+    url(r'^about$', views.about, name='about'),
     url(r'^admin/', include(admin.site.urls)),
 )
