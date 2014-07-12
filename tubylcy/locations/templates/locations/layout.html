@@ -3,8 +3,9 @@
         <title>{%block title %} Help your community {% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="/static/custom/main.css" rel="stylesheet" media="screen">
+        {% load staticfiles %}
+        <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
+        <link href="{% static "custom/main.css" %}" rel="stylesheet" media="screen">
 
     </head>
     <body>
