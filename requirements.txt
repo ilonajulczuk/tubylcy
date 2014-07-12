@@ -7,3 +7,12 @@ git+https://github.com/galuszkak/django-behave#egg=django-behave
 behave==1.2.4
 behaving==0.7
 chaussette==1.1
+django-allauth==0.17.0
+oauthlib==0.6.3
+parse==1.6.4
+parse-type==0.3.4
+python3-openid==3.0.4
+requests==2.3.0
+requests-oauthlib==0.4.1
+six==1.7.3
+splinter==0.6.0

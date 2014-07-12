@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Event
+from .models import Event, Quest
 from rest_framework import serializers
 
 
@@ -16,5 +16,16 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
+    start = serializers.DateTimeField()
+    end = serializers.DateTimeField()
+
     class Meta:
         model = Event
+
+
+class QuestSerializer(serializers.HyperlinkedModelSerializer):
+    reporter = UserSerializer()
+
+    class Meta:
+        model = Quest
+        fields = ('description', 'title')
