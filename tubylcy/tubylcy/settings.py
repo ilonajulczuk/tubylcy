@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django.contrib.gis',
+    'floppyforms',
 )
 
 MIDDLEWARE_CLASSES = (
