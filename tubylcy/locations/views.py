@@ -1,6 +1,8 @@
+from rest_framework import viewsets, mixins
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from .serializers import UserSerializer, GroupSerializer
+
+from .models import Event
+from .serializers import UserSerializer, GroupSerializer, EventSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -17,3 +19,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class EventViewSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    """
+    API endpoint that allows events to be viewed or edited.
+    """
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+

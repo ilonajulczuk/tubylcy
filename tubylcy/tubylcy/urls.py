@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.shortcuts import render
 from django.conf.urls import patterns, url, include
 from rest_framework import routers
 from locations import views
@@ -7,6 +6,7 @@ from locations import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'events', views.EventViewSet)
 
 
 # Create your views here.
