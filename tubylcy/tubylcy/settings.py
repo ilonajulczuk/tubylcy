@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'locations',
     'rest_framework',
+    'django_behave',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,3 +101,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
