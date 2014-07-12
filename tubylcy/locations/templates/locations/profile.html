@@ -1,0 +1,40 @@
+{% extends 'locations/layout.html' %}
+{% block content %}
+<div>
+    <h1>Your events</h1>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Creator</th>
+            <th>Starts</th>
+            <th>Ends</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    {% for event in events %}
+        <tr>
+            <td>
+                {{ event.title }}
+            </td>
+            <td>
+                {{ event.creator.username }}
+            </td>
+            <td>
+                {{ event.start }}
+            </td>
+            <td>
+                {{ event.end }}
+            </td>
+            <td>
+                {{ event.description }}
+            </td>
+        </tr>
+
+    {% endfor %}
+    </table>
+    {% if not events %}
+        No events so far...
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User, Group
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.template import RequestContext, loader
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from rest_framework import viewsets, mixins
 
 
@@ -10,17 +9,23 @@ from .serializers import UserSerializer, GroupSerializer, EventSerializer
 
 
 def index(request):
-    template = loader.get_template('locations/index.html')
-    context = RequestContext(request, {
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'locations/index.html')
 
 
 def about(request):
-    template = loader.get_template('locations/about.html')
-    context = RequestContext(request, {
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'locations/about.html')
+
+
+@login_required
+def profile(request, username):
+    if request.user.username != username:
+        return redirect('/')
+
+    ctx = {
+        'events': Event.objects.filter(creator__username=username)
+    }
+
+    return render(request, 'locations/profile.html', ctx)
 
 
 class UserViewSet(viewsets.ModelViewSet):

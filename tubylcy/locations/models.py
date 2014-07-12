@@ -7,6 +7,8 @@ class Event(models.Model):
     end = models.DateTimeField()
 
     address = models.TextField()
+    title = models.CharField(max_length=200)
+    description = models.TextField()
 
     # some kind of geohash?
     localization = models.CharField(max_length=100)

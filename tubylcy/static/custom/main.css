@@ -2,6 +2,18 @@
     padding-top: 80px;
 }
 
+.navbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 footer {
     margin-top: 20px;
+}
+
+.logged-out {
+    background: gainsboro url("http://i.myniceprofile.com/1391/139154.jpg") no-repeat center 30px;
+    background-size: 90%;
+}
+.pull-right {
+    float:right;
 }
