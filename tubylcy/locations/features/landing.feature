@@ -4,5 +4,5 @@ Feature: Main Page
         Given a browser
 
     Scenario: Search for BDD
-        When I visit "http://127.0.0.1:8000/"
-        Then browser title is "Help Your Community"
+        When I visit "http://localhost:8081/"
+        Then browser title is "Help your community"
