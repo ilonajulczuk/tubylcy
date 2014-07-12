@@ -17,5 +17,5 @@ class NewVisitorTest(LiveServerTestCase):
         # He notices the page title and header mention helping local community
         self.assertIn('Help your community', self.browser.title)
         # He wants to learn more about it
-        more_button = self.browser.find_element_by_id('id_learn_more')
+        more_button = self.browser.find_element_by_id('id-learn-more')
         more_button.click()

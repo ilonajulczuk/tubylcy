@@ -1,15 +1,23 @@
-<html>
-<head>
-<title>Help your community</title> 
-</head>
-<body>
-<h1>Dear Guest!</h1>
-This service is designed to control and support crowdfunding in your:
-<ul>
-    <li>City</li>
-    <li>District</li>
-    <li>Village</li>
-    <li>Anywhere you are!</li>
-</ul>
-</body>
-</html>
+{% extends 'locations/layout.html' %}
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <img src="http://placekitten.com/200/300">
+        <h1>Help your community!</h1>
+        <p><a class="btn btn-primary btn-lg" role="button" id="id-learn-more">Learn more »</a></p>
+    </div>
+</div>
+<div>
+    <h1>Dear Guest!</h1>
+    <p>
+        This service is designed to control and support crowdfunding in your:
+    </p>
+    <ul>
+        <li>City</li>
+        <li>District</li>
+        <li>Village</li>
+        <li>Anywhere you are!</li>
+    </ul>
+</div>
+{% endblock %}
+
