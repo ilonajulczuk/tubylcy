@@ -1,22 +1,64 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
+<!DOCTYPE html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        html { height: 100% }
+        body { height: 100%; margin: 0; padding: 0 }
+        #map-canvas { height: 100% }
+    </style>
     <script type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_uoUe2-_GnkQVHLIG4nx_MkWnkOKxfMM">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5todS3AsLd1r3gyTm9BMN34DLSOGITJw">
     </script>
-    <script type="text/javascript">
+
+    <script>
+
+        var map;
+
         function initialize() {
-             var mapOptions = {
-             center: new google.maps.LatLng(-34.397, 150.644),
-             zoom: 8
-         };
-             var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            var mapOptions = {
+                zoom: 14
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            // Try HTML5 geolocation
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    var infowindow = new google.maps.InfoWindow({
+                        map: map,
+                        position: pos,
+                        content: 'Location found using HTML5.'
+                    });
+                    map.setCenter(pos);
+                }, function() {
+                handleNoGeolocation(true);
+                   });
+            } else {
+                // Browser doesn't support Geolocation
+                handleNoGeolocation(false);
+              }
+        }
+
+        function handleNoGeolocation(errorFlag) {
+        if (errorFlag) {
+              var content = 'Error: The Geolocation service failed.';
+        } else {
+              var content = 'Error: Your browser doesn\'t support geolocation.';
+          }
+        var options = {
+                map: map,
+                position: new google.maps.LatLng(60, 105),
+                content: content
+        };
+
+        var infowindow = new google.maps.InfoWindow(options);
+            map.setCenter(options.position);
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-
-</head>
+    </head>
 <div class="jumbotron">
     <div class="container">
         <img src="http://placekitten.com/200/300">
@@ -35,7 +77,7 @@
         <li>Village</li>
         <li>Anywhere you are!</li>
     </ul>
-    <div id="map-canvas"/>
 </div>
+<div id="map-canvas"></div>
 {% endblock %}
 
