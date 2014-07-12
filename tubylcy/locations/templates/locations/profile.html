@@ -1,7 +1,7 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
 <div>
-    <h1>Events</h1>
+    <h1>Events <a>[Create]</a> <a>[Browse all]</a></h1>
     <table class="table">
     <thead>
         <tr>
@@ -37,7 +37,7 @@
         No events so far...
     {% endif %}
 
-    <h1>Quests</h1>
+    <h1>Quests <a>[Create]</a> <a>[Browse all]</a></h1>
     <table class="table">
         <thead>
         <tr>
@@ -47,6 +47,7 @@
             <th>Created</th>
             <th>Finished</th>
             <th>Assignees</th>
+            <th>Bounty</th>
         </tr>
         </thead>
         {% for quest in quests %}
@@ -70,6 +71,10 @@
                 {% for assignee in quest.assignees.all %}
                 {{ assignee }}
                 {% endfor %}
+            </td>
+            <td>
+                {{ quest.bounty }}
+                <a class='glyphicon glyphicon-usd ' href="/actions/donate/">donate!</a>
             </td>
         </tr>
 
