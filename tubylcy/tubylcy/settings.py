@@ -101,3 +101,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
