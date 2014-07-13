@@ -27,6 +27,7 @@
 <script>
     var nav = null;
     var map = new OpenLayers.Map("basicMap");
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
 
     $(function requestPosition() {
         if (nav == null) {
@@ -40,20 +41,82 @@
 
     });
 
+    function getLongLat(str) {
+        var parsing = new OpenLayers.Format.WKT();
+        var coords = OpenLayers.String.trim(str).split(parsing.regExes.spaces);
+        return {
+            long: coords[1].slice(1, -1),
+            lat: coords[2].slice(0, -1)
+        };
+    }
+
+    function convertCoords(str) {
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var longLat = getLongLat(str);
+        return new OpenLayers.LonLat(longLat.long, longLat.lat).transform( fromProjection, toProjection);
+    }
+
     function successCallback(position) {
-        init(position.coords.latitude, position.coords.longitude)
+        init(position.coords.latitude, position.coords.longitude);
         $.ajax({
             url: '/api/events/',
-            successful: function (data) {
-                console.log(data);
-                data.each(function(i, elem) {
+            success: function (data) {
+                $(data).each(function(i, elem) {
+                    var position = convertCoords(elem.point);
+                    var parsing = new OpenLayers.Format.WKT();
+                    var coords = OpenLayers.String.trim(elem.point).split(parsing.regExes.spaces);
+                    var longLat = {
+                        long: coords[1].slice(1, -1),
+                        lat: coords[2].slice(0, -1)
+                    };
 
-                    var markers = new OpenLayers.Layer.Markers( "Markers" );
-                    map.addLayer(markers);
                     markers.addMarker(new OpenLayers.Marker(position));
+                    map.addLayer(markers);
+                    var myLocation = new OpenLayers.Geometry.Point(longLat.long, longLat.lat)
+                            .transform('EPSG:4326', 'EPSG:3857');
+
+
+                    console.log(elem);
+                    // A popup with some information about our location
+                    var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                        myLocation.getBounds().getCenterLonLat(), null,
+                        "<p>" + elem.title + "</p>", null,
+                        false // <-- true if we want a close (X) button, false otherwise
+                    );
+
+                    map.addPopup(popup);
                 });
             }
-        })
+        });
+        $.ajax({
+            url: '/api/quests/',
+            success: function (data) {
+                $(data).each(function(i, elem) {
+                    var position = convertCoords(elem.point);
+                    var parsing = new OpenLayers.Format.WKT();
+                    var coords = OpenLayers.String.trim(elem.point).split(parsing.regExes.spaces);
+                    var longLat = {
+                        long: coords[1].slice(1, -1),
+                        lat: coords[2].slice(0, -1)
+                    };
+
+                    markers.addMarker(new OpenLayers.Marker(position));
+                    map.addLayer(markers);
+                    var myLocation = new OpenLayers.Geometry.Point(longLat.long, longLat.lat)
+                            .transform('EPSG:4326', 'EPSG:3857');
+
+                    // A popup with some information about our location
+                    var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                            myLocation.getBounds().getCenterLonLat(), null,
+                                    "<h1><a href='/quest/" + elem.pk + "'> "  + elem.title + "</a></h1><p>" + elem.description + "</p>", null,
+                            false // <-- true if we want a close (X) button, false otherwise
+                    );
+
+                    map.addPopup(popup);
+                });
+            }
+        });
     }
 
     function errorCallback(position) {
@@ -73,7 +136,17 @@
         map.addLayer(markers);
         markers.addMarker(new OpenLayers.Marker(position));
 
+        var myLocation = new OpenLayers.Geometry.Point(longitude, latitude)
+                .transform('EPSG:4326', 'EPSG:3857');
+
+        var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                myLocation.getBounds().getCenterLonLat(), null,
+                "<p>You're there</p>", null,
+                false // <-- true if we want a close (X) button, false otherwise
+        );
+
         map.setCenter(position, zoom);
+        map.addPopup(popup);
     }
 
 </script>

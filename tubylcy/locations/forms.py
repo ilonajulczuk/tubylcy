@@ -19,5 +19,5 @@ class QuestForm(forms.ModelForm):
     class Meta:
         model = Quest
         fields = (
-            'bounty', 'title', 'description', 'assignees'
+            'bounty', 'title', 'description', 'assignees', 'point'
         )

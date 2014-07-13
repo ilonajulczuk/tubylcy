@@ -55,7 +55,7 @@ class AddEvent(LoginRequiredMixin, FormHelperViewMixin, CreateView):
 class AddQuest(LoginRequiredMixin, FormHelperViewMixin, CreateView):
     model = Quest
     fields = (
-        'bounty', 'title', 'description', 'assignees'
+        'bounty', 'title', 'description', 'assignees', 'point'
     )
 
     template_name = 'locations/quest/add.html'
