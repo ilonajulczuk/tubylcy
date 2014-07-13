@@ -17,10 +17,10 @@
     {% for quest in quests %}
     <tr>
         <td>
-            <a href="/quests/{{ quest.pk }}">{{ quest.pk }}</a>
+            {{ quest.pk }}
         </td>
         <td>
-            {{ quest.title }}
+            <a href="/quests/{{ quest.pk }}">{{ quest.title }}</a>
         </td>
         <td>
             {{ quest.description }}
