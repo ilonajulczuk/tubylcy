@@ -31,6 +31,10 @@ class Quest(models.Model):
     assignees = models.ManyToManyField(User, related_name='assigned_quests')
     reporter = models.ForeignKey(User, related_name='reported_quests')
 
+    point = models.PointField(srid=4326)
+
+    objects = models.GeoManager()
+
     def __str__(self):
         return 'Quest {0}'.format([self.title])
 

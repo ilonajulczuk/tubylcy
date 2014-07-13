@@ -16,10 +16,10 @@
     {% for event in events %}
     <tr>
         <td>
-            <a href="/event/{{event.pk}}">{{ event.pk }}</a>
+            {{ event.pk }}
         </td>
         <td>
-            {{ event.title }}
+            <a href="/event/{{event.pk}}">{{ event.title }}</a>
         </td>
         <td>
             {{ event.creator.username }}
