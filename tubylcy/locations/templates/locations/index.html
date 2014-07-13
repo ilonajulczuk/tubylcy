@@ -1,51 +1,10 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
-    <script>
-        var map;
-
-        function initialize() {
-            var mapOptions = {
-                zoom: 14
-            };
-            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            // Try HTML5 geolocation
-            if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    var infowindow = new google.maps.InfoWindow({
-                        map: map,
-                        position: pos,
-                        content: 'Location found using HTML5.'
-                    });
-                    map.setCenter(pos);
-                }, function() {
-                handleNoGeolocation(true);
-                   });
-            } else {
-                // Browser doesn't support Geolocation
-                handleNoGeolocation(false);
-              }
-        }
-
-        function handleNoGeolocation(errorFlag) {
-        if (errorFlag) {
-              var content = 'Error: The Geolocation service failed.';
-        } else {
-              var content = 'Error: Your browser doesn\'t support geolocation.';
-          }
-        var options = {
-                map: map,
-                position: new google.maps.LatLng(60, 105),
-                content: content
-        };
-
-        var infowindow = new google.maps.InfoWindow(options);
-            map.setCenter(options.position);
-        }
-
-        google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-    </head>
+    <title>OpenLayers Demo</title>
+    <style type="text/css">
+    </style>
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <div class="jumbotron">
     <div class="container">
         <h1>Help your community!</h1>
@@ -53,17 +12,57 @@
     </div>
 </div>
 <div>
-    <div class='col-md-8' id="map-canvas"></div>
-    <div class="col-md-4">
+    <div class='col-sm-8' id="basicMap"></div>
+    <div class="col-sm-4">
 
     <h1>Choose your adventure!</h1>
     <ul>
-        <li><a>Create</a> / <a>browse</a> events</li>
-        <li><a>Create</a> / <a>browse</a> quests</li>
-        <li><a>Donate</a> quests, events or people!</li>
+        <li><a href="/event/add">Create</a> / <a href="/event/">browse</a> events</li>
+        <li><a href="/quest/add">Create</a> / <a href="/quest/">browse</a> quests</li>
+        <li><a href="/donate/">Donate</a> quests, events or people!</li>
         <li><a>Mark</a> your places of interest</li>
     </ul>
     </div>
 </div>
+<script>
+    var nav = null;
+    $(function requestPosition() {
+        if (nav == null) {
+            nav = window.navigator;
+        }
+
+        var geoloc = nav.geolocation;
+        if (geoloc != null) {
+            geoloc.getCurrentPosition(successCallback, errorCallback);
+        }
+
+    });
+
+    function successCallback(position) {
+        init(position.coords.latitude, position.coords.longitude)
+
+    }
+
+    function errorCallback(position) {
+
+    }
+    function init(latitude, longitude) {
+        var map = new OpenLayers.Map("basicMap");
+        var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(longitude, latitude).transform( fromProjection, toProjection);
+        var zoom           = 15;
+
+        map.addLayer(mapnik);
+        map.setCenter(position, zoom );
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+        markers.addMarker(new OpenLayers.Marker(position));
+
+        map.setCenter(position, zoom);
+    }
+
+</script>
 {% endblock %}
 
