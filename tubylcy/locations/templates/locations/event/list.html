@@ -1,8 +1,43 @@
 {% extends 'locations/layout.html' %}
-{% block content %}
 
+{% block content %}
+<h1>Events <a class="btn btn-success" href="{% url 'add_event' %}">[Create]</a> <a  class="btn btn-success" href="{% url 'list_event' %}">[Browse all]</a></h1>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Creator</th>
+        <th>Starts</th>
+        <th>Ends</th>
+        <th>Description</th>
+    </tr>
+    </thead>
     {% for event in events %}
-        {{ event.title }}
+    <tr>
+        <td>
+            <a href="/event/{{event.pk}}">{{ event.pk }}</a>
+        </td>
+        <td>
+            {{ event.title }}
+        </td>
+        <td>
+            {{ event.creator.username }}
+        </td>
+        <td>
+            {{ event.start }}
+        </td>
+        <td>
+            {{ event.end }}
+        </td>
+        <td>
+            {{ event.description }}
+        </td>
+    </tr>
     {% endfor %}
+</table>
+    {% if not events %}
+    No events so far...
+    {% endif %}
 
 {% endblock %}
