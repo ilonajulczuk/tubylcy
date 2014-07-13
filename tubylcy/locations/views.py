@@ -1,13 +1,13 @@
 from braces.views._access import LoginRequiredMixin
-from crispy_forms.layout import Submit
 from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from rest_framework import viewsets, mixins
+from locations.forms import EventForm, QuestForm
 from locations.mixins import FormHelperViewMixin
 
 from .models import Event, Quest
@@ -43,6 +43,7 @@ class AddEvent(LoginRequiredMixin, FormHelperViewMixin, CreateView):
 
     template_name = 'locations/event/add.html'
     success_url = '/event/'
+    form_class = EventForm
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -59,6 +60,8 @@ class AddQuest(LoginRequiredMixin, FormHelperViewMixin, CreateView):
 
     template_name = 'locations/quest/add.html'
     success_url = '/quest/'
+
+    form_class = QuestForm
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

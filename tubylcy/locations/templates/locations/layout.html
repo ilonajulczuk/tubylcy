@@ -1,9 +1,13 @@
 <html>
     <head>
-        <title>{%block title %} Help your community {% endblock %}</title>
+        {% load staticfiles %}
+
+        <title>{% block title %} Help your community {% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-        {% load staticfiles %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+
         <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
         <link href="{% static "custom/main.css" %}" rel="stylesheet" media="screen">
 
