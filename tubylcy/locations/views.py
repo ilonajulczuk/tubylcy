@@ -3,7 +3,7 @@ from crispy_forms.layout import Submit
 from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
@@ -42,6 +42,7 @@ class AddEvent(LoginRequiredMixin, FormHelperViewMixin, CreateView):
     )
 
     template_name = 'locations/event/add.html'
+    success_url = '/event/'
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -57,13 +58,13 @@ class AddQuest(LoginRequiredMixin, FormHelperViewMixin, CreateView):
     )
 
     template_name = 'locations/quest/add.html'
+    success_url = '/quest/'
 
-    #
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.user = self.request.user
-    #     self.object.save()
-    #     return redirect(self.get_success_url())
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.reporter = self.request.user
+        self.object.save()
+        return redirect(self.get_success_url())
 
 
 class DetailEvent(DetailView):
@@ -88,6 +89,17 @@ class ListQuest(ListView):
     model = Quest
     template_name = 'locations/quest/list.html'
     context_object_name = 'quests'
+
+
+class EventListQuest(ListView):
+    model = Quest
+    template_name = 'locations/quest/list.html'
+    context_object_name = 'quests'
+
+    # TODO! WHY QUESTS AREN'T linked with Events?
+    def get_queryset(self):
+        event = get_object_or_404(Event, id=self.kwargs.get("quest_id", -1))
+        return Quest.objects.filter()
 
 
 class UserViewSet(viewsets.ModelViewSet):
