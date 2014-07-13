@@ -1,6 +1,34 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
 
-    {{ event.title }}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Creator</th>
+        <th>Starts</th>
+        <th>Ends</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>
+            {{ event.title }}
+        </td>
+        <td>
+            {{ event.creator.username }}
+        </td>
+        <td>
+            {{ event.start }}
+        </td>
+        <td>
+            {{ event.end }}
+        </td>
+        <td>
+            {{ event.description }}
+        </td>
+    </tr>
+</table>
 
+<a class="btn btn-lg btn-info" href="/event/">Show all</a>
 {% endblock %}

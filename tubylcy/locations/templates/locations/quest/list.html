@@ -1,8 +1,53 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
-
+<h1>Quests <a class="btn btn-success" href="{% url 'add_quest' %}">[Create]</a> <a class="btn btn-success" href="{% url 'list_quest' %}">[Browse all]</a></h1>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Reporter</th>
+        <th>Created</th>
+        <th>Finished</th>
+        <th>Assignees</th>
+        <th>Bounty</th>
+    </tr>
+    </thead>
     {% for quest in quests %}
-        {{ quest.title }}
-    {% endfor %}
+    <tr>
+        <td>
+            {{ quest.pk }}
+        </td>
+        <td>
+            {{ quest.title }}
+        </td>
+        <td>
+            {{ quest.description }}
+        </td>
+        <td>
+            {{ quest.reporter.username }}
+        </td>
+        <td>
+            {{ quest.created }}
+        </td>
+        <td>
+            {{ quest.finished }}
+        </td>
+        <td>
+            {% for assignee in quest.assignees.all %}
+            {{ assignee }}
+            {% endfor %}
+        </td>
+        <td>
+            {{ quest.bounty }}
+            <a class='glyphicon glyphicon-usd ' href="/actions/donate/">donate!</a>
+        </td>
+    </tr>
 
+    {% endfor %}
+</table>
+{% if not quests %}
+No quests so far...
+{% endif %}
 {% endblock %}
