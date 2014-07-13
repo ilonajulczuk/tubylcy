@@ -1,4 +1,4 @@
-Feature: Main Page
+Feature: Landing
 
     Background:
         Given a browser
@@ -8,5 +8,3 @@ Feature: Main Page
         Then browser title is "Help your community"
         And then I should see "Choose your adventure!"
         And then I should see "Mark your places of interest"
-
-
