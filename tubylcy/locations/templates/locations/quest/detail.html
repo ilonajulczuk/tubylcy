@@ -1,6 +1,8 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
 
+<h3>Quest <span id="quest-id">{{quest.id}}</span></h3>
+
 <table class="table">
     <thead>
     <tr>
@@ -36,9 +38,160 @@
         </td>
         <td>
             {{ quest.bounty }}
-            <a class='glyphicon glyphicon-usd ' href="/actions/donate/">donate!</a>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <input type="hidden" name="cmd" value="_donations">
+                <input type="hidden" name="business" value="random8902@gmail.com">
+                <input type="hidden" name="lc" value="US">
+                <input type="hidden" name="item_name" value="Quest {{ quest.pk}}">
+                <input type="hidden" name="no_note" value="0">
+                <input type="hidden" name="currency_code" value="PLN">
+                <input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHostedGuest">
+                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            </form>
         </td>
     </tr>
 </table>
+        <div class="container">
 <a class="btn btn-lg btn-info" href="/quest/">Show all</a>
+<a class="btn btn-lg btn-warning" href="/quest/">Claim prize</a>
+
+</div>
+</br>
+<div class='' id="basicMap"></div>
+<script>
+    var nav = null;
+    var quest_id = $('#quest-id').value;
+    console.log(quest_id);
+
+    var map = new OpenLayers.Map("basicMap");
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+
+    $(function requestPosition() {
+        if (nav == null) {
+            nav = window.navigator;
+        }
+
+        var geoloc = nav.geolocation;
+        if (geoloc != null) {
+            geoloc.getCurrentPosition(successCallback, errorCallback);
+        }
+
+    });
+
+    function getLongLat(str) {
+        var parsing = new OpenLayers.Format.WKT();
+        var coords = OpenLayers.String.trim(str).split(parsing.regExes.spaces);
+        return {
+            long: coords[1].slice(1, -1),
+            lat: coords[2].slice(0, -1)
+        };
+    }
+
+    function convertCoords(str) {
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var longLat = getLongLat(str);
+        return new OpenLayers.LonLat(longLat.long, longLat.lat).transform( fromProjection, toProjection);
+    }
+
+    function successCallback(position) {
+        init(position.coords.latitude, position.coords.longitude);
+        $.ajax({
+            url: '/api/events/',
+            success: function (data) {
+                $(data).each(function(i, elem) {
+                    var position = convertCoords(elem.point);
+                    var parsing = new OpenLayers.Format.WKT();
+                    var coords = OpenLayers.String.trim(elem.point).split(parsing.regExes.spaces);
+                    var longLat = {
+                        long: coords[1].slice(1, -1),
+                        lat: coords[2].slice(0, -1)
+                    };
+
+                    markers.addMarker(new OpenLayers.Marker(position));
+                    map.addLayer(markers);
+                    var myLocation = new OpenLayers.Geometry.Point(longLat.long, longLat.lat)
+                            .transform('EPSG:4326', 'EPSG:3857');
+
+
+                    // A popup with some information about our location
+                    var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                        myLocation.getBounds().getCenterLonLat(), null,
+                        "<h1><a href='/event/" + elem.id + "'> "  + elem.title + "</a></h1><p>" + elem.description + "</p>", null,
+                        false // <-- true if we want a close (X) button, false otherwise
+                    );
+
+                    var zoom = 5;
+                    map.setCenter(position, zoom);
+                    map.addPopup(popup);
+                });
+            }
+        });
+        $.ajax({
+            url: '/api/quests/',
+            success: function (data) {
+                $(data).each(function(i, elem) {
+                    var position = convertCoords(elem.point);
+                    var parsing = new OpenLayers.Format.WKT();
+                    var coords = OpenLayers.String.trim(elem.point).split(parsing.regExes.spaces);
+                    var longLat = {
+                        long: coords[1].slice(1, -1),
+                        lat: coords[2].slice(0, -1)
+                    };
+                    var marker = new OpenLayers.Marker(position);
+
+                    marker.setOpacity(0.6);
+                    if(elem.id == quest_id) {
+                        marker.inflate(4.1);
+                    }
+                    markers.addMarker(marker);
+                    map.addLayer(markers);
+                    var myLocation = new OpenLayers.Geometry.Point(longLat.long, longLat.lat)
+                            .transform('EPSG:4326', 'EPSG:3857');
+
+                    // A popup with some information about our location
+                    var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                            myLocation.getBounds().getCenterLonLat(), null,
+                                    "<h1><a href='/quest/" + elem.id + "'> "  + elem.title + "</a></h1><p>" + elem.description + "</p>", null,
+                            false // <-- true if we want a close (X) button, false otherwise
+                    );
+
+                    map.addPopup(popup);
+                });
+            }
+        });
+    }
+
+    function errorCallback(position) {
+
+    }
+
+    function init(latitude, longitude) {
+        var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(longitude, latitude).transform( fromProjection, toProjection);
+        var zoom           = 7;
+
+        map.addLayer(mapnik);
+        map.setCenter(position, zoom );
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+        markers.addMarker(new OpenLayers.Marker(position));
+
+        var myLocation = new OpenLayers.Geometry.Point(longitude, latitude)
+                .transform('EPSG:4326', 'EPSG:3857');
+
+        var popup = new OpenLayers.Popup.FramedCloud("Popup",
+                myLocation.getBounds().getCenterLonLat(), null,
+                "<p>You're there</p>", null,
+                false // <-- true if we want a close (X) button, false otherwise
+        );
+
+        map.setCenter(position, zoom);
+        map.addPopup(popup);
+    }
+
+</script>
 {% endblock %}
