@@ -21,6 +21,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Event
+        fields = ('id', 'description', 'title', 'point')
 
 
 class QuestSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,4 +29,4 @@ class QuestSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Quest
-        fields = ('description', 'title')
+        fields = ('id', 'description', 'title', 'point')
