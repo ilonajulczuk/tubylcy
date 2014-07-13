@@ -26,6 +26,8 @@
 </div>
 <script>
     var nav = null;
+    var map = new OpenLayers.Map("basicMap");
+
     $(function requestPosition() {
         if (nav == null) {
             nav = window.navigator;
@@ -40,14 +42,25 @@
 
     function successCallback(position) {
         init(position.coords.latitude, position.coords.longitude)
+        $.ajax({
+            url: '/api/events/',
+            successful: function (data) {
+                console.log(data);
+                data.each(function(i, elem) {
 
+                    var markers = new OpenLayers.Layer.Markers( "Markers" );
+                    map.addLayer(markers);
+                    markers.addMarker(new OpenLayers.Marker(position));
+                });
+            }
+        })
     }
 
     function errorCallback(position) {
 
     }
+
     function init(latitude, longitude) {
-        var map = new OpenLayers.Map("basicMap");
         var mapnik         = new OpenLayers.Layer.OSM();
         var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
         var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
