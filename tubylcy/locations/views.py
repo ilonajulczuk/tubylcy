@@ -91,17 +91,6 @@ class ListQuest(ListView):
     context_object_name = 'quests'
 
 
-class EventListQuest(ListView):
-    model = Quest
-    template_name = 'locations/quest/list.html'
-    context_object_name = 'quests'
-
-    # TODO! WHY QUESTS AREN'T linked with Events?
-    def get_queryset(self):
-        event = get_object_or_404(Event, id=self.kwargs.get("quest_id", -1))
-        return Quest.objects.filter()
-
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
