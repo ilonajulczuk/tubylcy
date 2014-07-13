@@ -1,7 +1,7 @@
 {% extends 'locations/layout.html' %}
 {% block content %}
 <div>
-    <h1>Events <a>[Create]</a> <a>[Browse all]</a></h1>
+    <h1>Events <a class="btn btn-success" href="{% url 'add_event' %}">[Create]</a> <a >[Browse all]</a></h1>
     <table class="table">
     <thead>
         <tr>
@@ -37,7 +37,7 @@
         No events so far...
     {% endif %}
 
-    <h1>Quests <a>[Create]</a> <a>[Browse all]</a></h1>
+    <h1>Quests <a class="btn btn-success" href="{% url 'add_quest' %}">[Create]</a> <a class="btn btn-success" href="{% url 'list_quest' %}">[Browse all]</a></h1>
     <table class="table">
         <thead>
         <tr>

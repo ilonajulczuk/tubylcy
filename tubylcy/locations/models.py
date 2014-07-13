@@ -17,7 +17,7 @@ class Event(models.Model):
     objects = models.GeoManager()
 
     def __str__(self):
-        return 'Event which is starting ...'
+        return 'Event {0}'.format([self.title])
 
 
 class Quest(models.Model):
@@ -30,3 +30,7 @@ class Quest(models.Model):
 
     assignees = models.ManyToManyField(User, related_name='assigned_quests')
     reporter = models.ForeignKey(User, related_name='reported_quests')
+
+    def __str__(self):
+        return 'Quest {0}'.format([self.title])
+

@@ -1,11 +1,14 @@
-from crispy_forms.layout import Layout
+from braces.views._access import LoginRequiredMixin
+from crispy_forms.layout import Submit
 from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from rest_framework import viewsets, mixins
-from crispy_forms.helper import FormHelper
+from locations.mixins import FormHelperViewMixin
 
 from .models import Event, Quest
 from .serializers import UserSerializer, GroupSerializer, EventSerializer, QuestSerializer
@@ -32,25 +35,59 @@ def profile(request, username):
     return render(request, 'locations/profile.html', ctx)
 
 
-class AddEvent(CreateView):
+class AddEvent(LoginRequiredMixin, FormHelperViewMixin, CreateView):
     model = Event
     fields = (
-            'start', 'end', 'address', 'title', 'description', 'point'
-        )
+        'start', 'end', 'address', 'title', 'description', 'point'
+    )
 
-    template_name = 'locations/add_event.html'
+    template_name = 'locations/event/add.html'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.creator = self.request.user
+        self.object.save()
+        return redirect(self.get_success_url())
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        helper = FormHelper()
-        helper.form_class = 'form-horizontal'
-        helper.label_class = 'col-lg-2'
-        helper.field_class = 'col-lg-8'
-        context['helper'] = helper
-        return context
+
+class AddQuest(LoginRequiredMixin, FormHelperViewMixin, CreateView):
+    model = Quest
+    fields = (
+        'bounty', 'title', 'description', 'assignees'
+    )
+
+    template_name = 'locations/quest/add.html'
+
+    #
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     self.object.user = self.request.user
+    #     self.object.save()
+    #     return redirect(self.get_success_url())
+
+
+class DetailEvent(DetailView):
+    model = Event
+    template_name = 'locations/event/detail.html'
+    context_object_name = 'event'
+
+
+class DetailQuest(DetailView):
+    model = Quest
+    template_name = 'locations/quest/detail.html'
+    context_object_name = 'quest'
+
+
+class ListEvent(ListView):
+    model = Event
+    template_name = 'locations/event/list.html'
+    context_object_name = 'events'
+
+
+class ListQuest(ListView):
+    model = Quest
+    template_name = 'locations/quest/list.html'
+    context_object_name = 'quests'
 
 
 class UserViewSet(viewsets.ModelViewSet):

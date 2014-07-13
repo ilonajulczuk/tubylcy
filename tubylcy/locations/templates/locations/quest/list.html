@@ -1,0 +1,8 @@
+{% extends 'locations/layout.html' %}
+{% block content %}
+
+    {% for quest in quests %}
+        {{ quest.title }}
+    {% endfor %}
+
+{% endblock %}
