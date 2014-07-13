@@ -39,14 +39,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'locations',
     'rest_framework',
     'django_behave',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'django.contrib.gis',
-    'floppyforms',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'tubylcy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
@@ -134,3 +134,5 @@ SOCIALACCOUNT_PROVIDERS = {
 SITE_ID = 1
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

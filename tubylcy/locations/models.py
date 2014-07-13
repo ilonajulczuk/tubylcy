@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group
 
 
@@ -10,9 +10,14 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
 
-    # some kind of geohash?
-    localization = models.CharField(max_length=100)
     creator = models.ForeignKey(User)
+
+    point = models.PointField(srid=4326)
+
+    objects = models.GeoManager()
+
+    def __str__(self):
+        return 'Event which is starting ...'
 
 
 class Quest(models.Model):
