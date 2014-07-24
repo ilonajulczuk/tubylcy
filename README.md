@@ -1,3 +1,4 @@
+[![Build Status](https://drone.io/github.com/atteroTheGreatest/tubylcy/status.png)](https://drone.io/github.com/atteroTheGreatest/tubylcy/latest)
 [![Stories in Ready](https://badge.waffle.io/atteroTheGreatest/tubylcy.png?label=ready&title=Ready)](https://waffle.io/atteroTheGreatest/tubylcy)
 #Installation
 
